@@ -1,13 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Resume Uploader</title>
+    <title>Resume Matcher - Step 1</title>
 </head>
 <body>
-    <h2>Upload Your Resume</h2>
+    <h1>Resume Matcher - Upload Resume(s) & Job Description</h1>
     <form action="/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".pdf,.docx,.txt" required>
-        <button type="submit">Upload</button>
+
+        <!-- Single resume upload -->
+        <label for="file">Upload Resume (PDF/DOCX/TXT):</label>
+        <input type="file" name="file">
+        <br><br>
+
+        <!-- ZIP upload for multiple resumes -->
+        <label for="zip_file">Or Upload ZIP of Resumes:</label>
+        <input type="file" name="zip_file" accept=".zip">
+        <br><br>
+
+        <!-- Job Description input -->
+        <label for="jd_text">Paste Job Description:</label>
+        <br>
+        <textarea id="jd_text" name="jd_text" rows="6" cols="70"></textarea>
+        <br><br>
+
+        <label for="jd_file">Or Upload JD File (PDF/DOCX/TXT):</label>
+        <input type="file" name="jd_file">
+        <br><br>
+
+        <button type="submit">Submit</button>
     </form>
 </body>
 </html>

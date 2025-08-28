@@ -1,0 +1,30 @@
+Job Title Python Developer
+
+Job Description
+We are seeking a Python Developer with strong experience in backend development and API integration. The ideal candidate will have expertise in Flask or Django, SQLNoSQL databases, and familiarity with cloud platforms.
+
+Responsibilities
+
+Develop and maintain backend applications using Python.
+
+Build and optimize RESTful APIs.
+
+Work with databases (MySQL, MongoDB) for data storage and retrieval.
+
+Collaborate with frontend developers to integrate APIs.
+
+Deploy applications on AWS or Azure.
+
+Requirements
+
+Strong knowledge of Python programming.
+
+Experience with FlaskDjango framework.
+
+Proficiency in SQL and NoSQL databases.
+
+Understanding of APIs and microservices.
+
+Experience with GitGitHub for version control.
+
+Bonus Knowledge of machine learning or NLP.
