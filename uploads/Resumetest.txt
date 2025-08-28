@@ -1,0 +1,58 @@
+KIRAN DHAMANDE
+A highly motivated and dedicated Electronic and Telecommunication
+student looking for a position in an esteemed organization where I
+can utilize my skills for the growth of the organization.
+BTech Undergraduate ( Electronic and Telecommunication )
+MKSSS's Cummins College of
+Engineering for Women, Pune
+2022-2026
+CGPA - 7.7 (current)
+Kiran.dhamande@cumminscollge.in
++91 9529356344
+Chandrapur, Maharashtra
+DOB: 16/01/2003
+St. Michael's English School,
+Chandrapur
+SSC Board - 89.20%
+SKILLS
+HIGHLIGHTS
+Higher Secondary Education
+Sikshan Maharshi Late Shrihari
+Jiwatode College, Chandrapur
+HSC Board - 90.33% Secondary
+Education
+ONLINE SHOPPING SYSTEM
+EDUCATION
+SOFT SKILLS
+PROJECTS
+LANGUAGES
+ACCOMPLISHMENTS
+Made into top 5 teams data structure
+hackathon in ccoew technical fest‘23
+Teamwork Adaptability
+Fast learner
+Leadership
+Time management
+Project management English
+Hindi
+Marathi
+This project involves building a console-based
+Java application that simulates an online
+shopping experience. It uses Object-Oriented
+Programming to structure core features and
+JDBC to interact with a relational database.
+Basics of C, C++
+Basic of Java
+Standard HTML
+DBMS
+MS office tools -
+Word, PowerPoint,
+Excel
+AUTONOMOUS FIRE DETECTION AND
+EXTINGUISHING SYSTEM
+This project involves designing and developing a
+robotic system capable of detecting and
+extinguishing fire autonomously. It uses flame
+sensors for fire detection and controls movement
+and water spraying using Arduino-based logic.
+Participated in Katalyst Hackathon
