@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | AI Matcher</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Small centering for the signup box to match login */
+    </style>
+</head>
+<body class="auth-wrapper">
+    <div class="card-shadow auth-box">
+        <h2 style="margin-bottom: 20px;">Create an account</h2>
+        <form method="POST" action="{{ url_for('signup') }}">
+            <input type="text" name="full_name" class="form-control" placeholder="Full Name">
+            <input type="text" name="username" class="form-control" placeholder="Username" required>
+            <input type="email" name="email" class="form-control" placeholder="Email Address" required>
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <input type="password" name="confirm_password" class="form-control" placeholder="Confirm Password" required>
+            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Sign Up</button>
+        </form>
+
+        <p style="margin: 20px 0 10px 0; color: var(--text-medium);">
+            Already have an account? <a href="{{ url_for('login') }}">Log in</a>
+        </p>
+
+        <!-- Display Flask flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div style="margin-top: 15px;">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>

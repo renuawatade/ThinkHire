@@ -4,36 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Resume Parsing & Job Matching | Hire Smarter</title>
-    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Link to your static CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
+    <!-- Header -->
     <header>
         <div class="container-custom navbar">
-            <div class="logo">🧠 AI Matcher</div>
+            <div class="logo"> AI Matcher</div>
             <nav class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="contact.html">Contact</a>
-                <a href="login.html" class="btn-primary" style="margin-left: 25px;">Login/Signup</a>
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+                <a href="{{ url_for('login') }}" class="btn-primary" style="margin-left: 25px;">Login / Signup</a>
             </nav>
         </div>
     </header>
 
+    <!-- Hero Section -->
     <main class="container-custom" style="padding-top: 80px; padding-bottom: 80px;">
         <section style="text-align: center; max-width: 800px; margin: 0 auto;">
             <h1 style="font-size: 3.5rem; margin-bottom: 20px; line-height: 1.2;">
-                Hire Smarter with <span style="color: var(--primary-blue);">AI-Powered</span> Resume Parsing and Job Matching.
+                Hire Smarter with 
+                <span style="color: var(--primary-blue);">AI-Powered</span> 
+                Resume Parsing and Job Matching.
             </h1>
             <p style="font-size: 1.25rem; color: var(--text-medium); margin-bottom: 40px;">
-                Upload resumes and job descriptions to get ranked candidate matches using **NLP** and **semantic similarity**. Streamline your recruitment process and find the perfect fit, faster.
+                Upload resumes and job descriptions to get ranked candidate matches using 
+                <strong>NLP</strong> and <strong>semantic similarity</strong>. 
+                Streamline your recruitment process and find the perfect fit — faster.
             </p>
-            <a href="login.html" class="btn-primary" style="padding: 15px 40px; font-size: 1.1rem;">
+            <a href="{{ url_for('login') }}" class="btn-primary" style="padding: 15px 40px; font-size: 1.1rem;">
                 Get Started <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
             </a>
         </section>
     </main>
 
+    <!-- Footer -->
     <footer>
         <div class="container-custom">
             &copy; 2025 AI Matcher | All Rights Reserved.

@@ -1,0 +1,12 @@
+{
+  "renu": {
+    "full_name": "renu",
+    "email": "renu@gmail.com",
+    "password": "scrypt:32768:8:1$39C8TVjHoPcHBeQJ$86683e384a2435155c938ef226773ad3013fef06cd2833b2f5699f88bcf19b8e18f048956429bb921790f9618885ab1537974a3d2be2123284abc697522464bb"
+  },
+  "kiran": {
+    "full_name": "kiran",
+    "email": "kiran@gmail.com",
+    "password": "scrypt:32768:8:1$0LAUzugGuSD13MYU$472faed95669b162b5d61c4169f45059f2dca0efe45faae1be7cf4d8de6393cdc3548924a17bd375adfd7a580af72f919095fdde697ac3a6736df502e4d8a2d2"
+  }
+}
