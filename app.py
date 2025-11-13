@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, Response, send_file
+import io
+import csv
 import os
 import json
 import docx2txt
@@ -57,7 +59,31 @@ def extract_text(file_path):
             for page in reader.pages:
                 text += page.extract_text() or ""
     elif file_path.endswith(".docx"):
-        text = docx2txt.process(file_path) or ""
+        # Some .docx files are not valid zip archives (corrupted or misnamed).
+        # Check first to avoid docx2txt raising BadZipFile.
+        try:
+            if zipfile.is_zipfile(file_path):
+                try:
+                    text = docx2txt.process(file_path) or ""
+                except Exception:
+                    # If docx2txt fails for any reason, fallback to best-effort decode
+                    try:
+                        with open(file_path, "rb") as f:
+                            data = f.read()
+                            text = data.decode("utf-8", errors="ignore")
+                    except Exception:
+                        text = ""
+            else:
+                # Not a valid zip -> fallback to reading as plain text
+                try:
+                    with open(file_path, "rb") as f:
+                        data = f.read()
+                        text = data.decode("utf-8", errors="ignore")
+                except Exception:
+                    text = ""
+        except Exception:
+            # Any unexpected error: return empty string rather than crashing
+            text = ""
     elif file_path.endswith(".txt"):
         try:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -91,6 +117,8 @@ def home():
 @app.route("/index")
 def index():
     """Alias route for templates that expect an 'index' endpoint."""
+    # Clear previous analysis results when user starts a new one
+    session.pop('last_results', None)
     return home()
 
 
@@ -201,22 +229,101 @@ def upload_files():  # 👈 renamed to match dashboard.html
     resumes_raw = []
     resumes_info = []
 
-    # --- Handle resumes ---
+    # --- Handle uploaded ZIP files (input name: resume_zips) ---
+    if "resume_zips" in request.files:
+        for zip_file in request.files.getlist("resume_zips"):
+            if not zip_file or not zip_file.filename:
+                continue
+            zip_name = os.path.basename(zip_file.filename)
+            if not zip_name.lower().endswith(".zip"):
+                continue
+            zip_path = os.path.join(UPLOAD_FOLDER, zip_name)
+            zip_file.save(zip_path)
+            try:
+                with zipfile.ZipFile(zip_path, "r") as z:
+                    extract_dir = os.path.join(UPLOAD_FOLDER, os.path.splitext(zip_name)[0])
+                    os.makedirs(extract_dir, exist_ok=True)
+                    z.extractall(extract_dir)
+
+                    for member in z.namelist():
+                        if member.endswith("/") or member.endswith("\\"):
+                            continue
+                        member_basename = os.path.basename(member)
+                        if not member_basename:
+                            continue
+                        member_path = os.path.join(extract_dir, member)
+                        if not os.path.exists(member_path):
+                            continue
+                        if member_basename.lower().endswith((".pdf", ".docx", ".txt")):
+                            text = extract_text(member_path)
+                            resumes_raw.append(text)
+                            info = parse_resume(text, jd_text)
+                            info["FileName"] = member_basename
+                            info["Skills"] = info.get("skills", [])
+                            info["Name"] = info.get("name", "")
+                            info["Email"] = info.get("email", "")
+                            info["Phone"] = info.get("phone", "")
+                            resumes_info.append(info)
+            except zipfile.BadZipFile:
+                flash(f"Uploaded zip '{zip_name}' is not a valid archive.", "danger")
+
+
+    # --- Handle resumes (multiple files, directories, and zip archives) ---
     if "resume_files" in request.files:
         for resume in request.files.getlist("resume_files"):
-            if resume and resume.filename:
-                resume_path = os.path.join(UPLOAD_FOLDER, resume.filename)
-                resume.save(resume_path)
-                text = extract_text(resume_path)
-                resumes_raw.append(text)
-                info = parse_resume(text, jd_text)
-                # ensure keys expected by templates (capitalized) exist
-                info["FileName"] = resume.filename
-                info["Skills"] = info.get("skills", [])
-                info["Name"] = info.get("name", "")
-                info["Email"] = info.get("email", "")
-                info["Phone"] = info.get("phone", "")
-                resumes_info.append(info)
+            if not resume or not resume.filename:
+                continue
+
+            filename = os.path.basename(resume.filename)
+
+            # --- ZIP archive support ---
+            if filename.lower().endswith(".zip"):
+                zip_path = os.path.join(UPLOAD_FOLDER, filename)
+                resume.save(zip_path)
+                try:
+                    with zipfile.ZipFile(zip_path, "r") as z:
+                        extract_dir = os.path.join(UPLOAD_FOLDER, os.path.splitext(filename)[0])
+                        os.makedirs(extract_dir, exist_ok=True)
+                        z.extractall(extract_dir)
+
+                        for member in z.namelist():
+                            # skip directories
+                            if member.endswith("/") or member.endswith("\\"):
+                                continue
+                            member_basename = os.path.basename(member)
+                            if not member_basename:
+                                continue
+                            member_path = os.path.join(extract_dir, member)
+                            if not os.path.exists(member_path):
+                                # some zip entries may have nested directories; ensure path
+                                continue
+                            if member_basename.lower().endswith((".pdf", ".docx", ".txt")):
+                                text = extract_text(member_path)
+                                resumes_raw.append(text)
+                                info = parse_resume(text, jd_text)
+                                info["FileName"] = member_basename
+                                info["Skills"] = info.get("skills", [])
+                                info["Name"] = info.get("name", "")
+                                info["Email"] = info.get("email", "")
+                                info["Phone"] = info.get("phone", "")
+                                resumes_info.append(info)
+                except zipfile.BadZipFile:
+                    flash(f"Uploaded zip '{filename}' is not a valid archive.", "danger")
+                continue
+
+            # --- Regular file (including files uploaded via folder input) ---
+            resume_path = os.path.join(UPLOAD_FOLDER, filename)
+            resume.save(resume_path)
+            # If the browser provided a relative path (from directory upload), sanitize name above
+            text = extract_text(resume_path)
+            resumes_raw.append(text)
+            info = parse_resume(text, jd_text)
+            info["FileName"] = filename
+            info["Skills"] = info.get("skills", [])
+            info["Name"] = info.get("name", "")
+            info["Email"] = info.get("email", "")
+            info["Phone"] = info.get("phone", "")
+            resumes_info.append(info)
 
     # --- AI Matching ---
     matches = match_job_to_candidates(jd_text, resumes_raw, top_k=len(resumes_raw))
@@ -224,7 +331,28 @@ def upload_files():  # 👈 renamed to match dashboard.html
         if 0 <= idx < len(resumes_info):
             resumes_info[idx]["Score"] = score
             resumes_info[idx]["Suggestions"] = suggest_improvements(jd_text, resumes_raw[idx], resumes_info[idx].get("Skills", []))
+    # Ensure every candidate has a numeric Score (default 0.0) and Suggestions key
+    for r in resumes_info:
+        r.setdefault("Score", 0.0)
+        r.setdefault("Suggestions", r.get("Suggestions", []))
 
+    # Sort candidates by Score descending so highest match appears first
+    resumes_info.sort(key=lambda x: float(x.get("Score", 0.0)), reverse=True)
+
+    # Store a lightweight serializable copy of results in session for downloads
+    try:
+        serializable = []
+        for r in resumes_info:
+            serializable.append({
+                "FileName": r.get("FileName", ""),
+                "Score": float(r.get("Score", 0.0)),
+                "Skills": ", ".join(r.get("Skills", [])) if isinstance(r.get("Skills", []), (list, tuple)) else str(r.get("Skills", "")),
+                "Suggestions": (", ".join(r.get("Suggestions")) if isinstance(r.get("Suggestions"), (list, tuple)) else str(r.get("Suggestions", "")))
+            })
+        session["last_results"] = serializable
+    except Exception:
+        # do not crash on session serialization; skip storing if any issue
+        pass
     return render_template(
         "results.html",
         resumes_info=resumes_info,
@@ -237,6 +365,102 @@ def upload_files():  # 👈 renamed to match dashboard.html
 @login_required
 def results():
     return render_template("results.html", jd_text="", resumes_info=[], username=session.get("username"))
+
+
+@app.route('/download_csv')
+@login_required
+def download_csv():
+    data = session.get('last_results')
+    if not data:
+        flash('No results available to download. Run an analysis first.', 'warning')
+        return redirect(url_for('results'))
+
+    # Create CSV in-memory
+    si = io.StringIO()
+    cw = csv.writer(si)
+    cw.writerow(['Rank', 'FileName', 'MatchScore', 'Skills', 'Suggestions'])
+    for idx, row in enumerate(data, start=1):
+        cw.writerow([idx, row.get('FileName', ''), '{:.4f}'.format(float(row.get('Score', 0.0))), row.get('Skills', ''), row.get('Suggestions', '')])
+
+    output = si.getvalue()
+    mem = io.BytesIO()
+    mem.write(output.encode('utf-8'))
+    mem.seek(0)
+
+    return send_file(mem, as_attachment=True, download_name='matching_results.csv', mimetype='text/csv')
+
+
+@app.route('/export_pdf')
+@login_required
+def export_pdf():
+    data = session.get('last_results')
+    if not data:
+        flash('No results available to export. Run an analysis first.', 'warning')
+        return redirect(url_for('results'))
+
+    # Try to import reportlab; if missing, inform the user
+    try:
+        from reportlab.lib.pagesizes import letter
+        from reportlab.pdfgen import canvas
+        from reportlab.lib.units import inch
+    except Exception:
+        flash("PDF export requires the 'reportlab' package. Install it with: pip install reportlab", 'danger')
+        return redirect(url_for('results'))
+
+    buffer = io.BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+
+    # Header
+    c.setFont('Helvetica-Bold', 14)
+    c.drawString(40, height - 40, 'Candidate Matching Results')
+    c.setFont('Helvetica', 10)
+    c.drawString(40, height - 60, f'Generated for: {session.get("username", "") or "User"}')
+
+    y = height - 90
+    line_height = 14
+
+    # Table header
+    c.setFont('Helvetica-Bold', 10)
+    c.drawString(40, y, 'Rank')
+    c.drawString(80, y, 'FileName')
+    c.drawString(300, y, 'Score')
+    c.drawString(360, y, 'Skills')
+    y -= line_height
+    c.setFont('Helvetica', 9)
+
+    for idx, row in enumerate(data, start=1):
+        if y < 80:
+            c.showPage()
+            y = height - 50
+            c.setFont('Helvetica', 9)
+
+        fname = str(row.get('FileName', ''))
+        score = '{:.1f}%'.format(float(row.get('Score', 0.0)) * 100)
+        skills = str(row.get('Skills', ''))
+
+        c.drawString(40, y, str(idx))
+        c.drawString(80, y, (fname[:28] + '...') if len(fname) > 31 else fname)
+        c.drawString(300, y, score)
+        c.drawString(360, y, (skills[:60] + '...') if len(skills) > 63 else skills)
+        y -= line_height
+
+        # Suggestions on next line (wrapped)
+        sugg = str(row.get('Suggestions', ''))
+        if sugg:
+            # naive wrap at ~90 chars
+            parts = [sugg[i:i+90] for i in range(0, len(sugg), 90)]
+            for p in parts:
+                if y < 60:
+                    c.showPage()
+                    y = height - 50
+                    c.setFont('Helvetica', 9)
+                c.drawString(80, y, p)
+                y -= line_height
+
+    c.save()
+    buffer.seek(0)
+    return send_file(buffer, as_attachment=True, download_name='matching_results.pdf', mimetype='application/pdf')
 
 
 # ---------- Run ----------

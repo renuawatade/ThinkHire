@@ -64,20 +64,30 @@ def extract_phone(resume_text: str) -> str:
 # -------------------- Skill Extraction (Improved) --------------------
 def extract_skills(resume_text: str, jd_text: str = "") -> list:
     resume_norm = re.sub(r"[\W_]+", " ", resume_text.lower())
+    resume_text_lower = resume_text.lower()
     tokens = set(resume_norm.split())
 
     found = []
     for skill in SKILLS_DB:
-        skill_norm = re.sub(r"[\W_]+", " ", skill.lower()).strip()
+        skill_lower = skill.lower()
+        skill_norm = re.sub(r"[\W_]+", " ", skill_lower).strip()
         skill_words = skill_norm.split()
 
-        # Exact match on all words
+        # Exact substring match (most reliable)
+        if skill_lower in resume_text_lower:
+            found.append(skill)
+            continue
+        
+        # All words present in normalized text
         if all(w in tokens for w in skill_words):
             found.append(skill)
-        else:
-            # Fuzzy match for near-misses
-            for word in tokens:
-                if SequenceMatcher(None, word, skill_norm).ratio() > 0.8:
+            continue
+        
+        # Fuzzy match with lower threshold for partial matches
+        for word in tokens:
+            if len(word) > 2 and len(skill_norm) > 2:
+                similarity = SequenceMatcher(None, word, skill_norm).ratio()
+                if similarity > 0.75:  # Lowered from 0.8 for better detection
                     found.append(skill)
                     break
 

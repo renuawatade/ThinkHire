@@ -15,8 +15,8 @@
             <div class="logo">AI Matcher</div>
             <nav class="nav-links">
                 <a href="{{ url_for('index') }}">Dashboard</a>
-                <a href="#">About</a>
-                <a href="#">Contact</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
                 <a href="{{ url_for('logout') }}">Logout</a>
             </nav>
         </div>
@@ -27,11 +27,11 @@
             <h1 style="margin-bottom: 20px;">Candidate Matching Results</h1>
             <p style="color: var(--text-medium);">Results based on semantic analysis of uploaded resumes against the Job Description.</p>
 
-            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                <button class="btn-primary" style="background-color: #10B981;">
-                    <i class="fas fa-file-download"></i> Download Report (PDF)
-                </button>
-                <a href="{{ url_for('index') }}" class="btn-primary" style="background-color: #64748B;">
+            <div style="display: flex; gap:12px; justify-content: flex-start; margin-bottom: 20px;">
+                <a href="{{ url_for('download_csv') }}" class="btn-primary" style="background-color: #0369A1;">
+                    <i class="fas fa-file-csv"></i> Download CSV
+                </a>
+                <a href="{{ url_for('index') }}" class="btn-primary" style="background-color: #64748B; margin-left: auto;">
                     <i class="fas fa-redo"></i> New Analysis
                 </a>
             </div>
@@ -43,7 +43,7 @@
                         <tr>
                             <th>Rank</th>
                             <th>Candidate Name</th>
-                            <th>Match Score (%)</th>
+                            <th>Match Score</th>
                             <th>Top Skills</th>
                             <th>Suggestions for Improvement</th>
                         </tr>
@@ -53,8 +53,23 @@
                             {% for candidate in resumes_info %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ candidate.FileName }}</td>
-                                <td>{{ "%.2f" | format(candidate.Score * 100) if candidate.Score else "N/A" }}</td>
+                                <td>{{ candidate.Name if candidate.Name else candidate.FileName }}</td>
+                                <td style="width: 260px;">
+                                    {% set pct = (candidate.Score | float) * 100 %}
+                                    {% if pct >= 75 %}
+                                        {% set bar_class = 'score-green' %}
+                                    {% elif pct >= 50 %}
+                                        {% set bar_class = 'score-yellow' %}
+                                    {% else %}
+                                        {% set bar_class = 'score-red' %}
+                                    {% endif %}
+                                    <div style="display:flex; align-items:center; gap:12px;">
+                                        <div style="flex:1; background:#e6eef6; border-radius:6px; height:18px; overflow:hidden;">
+                                            <div class="score-bar {{ bar_class }}" style="width: {{ '%.2f'|format(pct) }}%;"></div>
+                                        </div>
+                                        <div style="min-width:56px; text-align:right; font-weight:600;">{{ '%.1f'|format(pct) }}%</div>
+                                    </div>
+                                </td>
                                 <td>
                                     {% if candidate.Skills %}
                                         {{ candidate.Skills | join(", ") }}
@@ -64,7 +79,6 @@
                                 </td>
                                 <td>
                                     {% if candidate.Suggestions %}
-                                        {# If suggestions is a sequence (list), join into a readable string #}
                                         {% if candidate.Suggestions is sequence and not candidate.Suggestions is string %}
                                             {{ candidate.Suggestions | join(', ') }}
                                         {% else %}
