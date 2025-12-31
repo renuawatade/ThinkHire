@@ -1,67 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | AI Matcher</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-    <header>
-        <div class="container-custom navbar">
-            <div class="logo">AI Matcher</div>
-            <nav class="nav-links">
-                <a href="{{ url_for('index') }}">Dashboard</a>
-                <a href="{{ url_for('about') }}">About</a>
-                <a href="{{ url_for('contact') }}">Contact</a>
-                <a href="{{ url_for('login') }}">Logout</a>
-            </nav>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About | ThinkHire</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body class="dashboard-theme">
+    <!-- Header: same structure as other templates, brand left and nav right -->
+    <header class="glass-header">
+      <div class="container-custom navbar">
+        <div class="logo" aria-label="ThinkHire brand">
+          <span class="brand-emoji" aria-hidden="true">💼</span>
+          <span class="brand-text">ThinkHire</span>
         </div>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="{{ url_for('index') }}">Dashboard</a>
+          <a href="{{ url_for('about') }}">About</a>
+          <a href="{{ url_for('contact') }}">Contact</a>
+          <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+      </div>
     </header>
 
-    <main class="container-custom" style="padding: 40px 20px;">
-        <div class="card-shadow">
-            <h1 style="margin-bottom: 20px;">
-                <i class="fas fa-cogs" style="margin-right: 10px; color: var(--primary-blue);"></i>
-                How Our System Works
-            </h1>
-            
-            <p style="font-size: 1.1rem; color: var(--text-medium); margin-bottom: 40px;">
-                We utilize cutting-edge Natural Language Processing (NLP) techniques to transform and enhance your Human Resources decision-making process.
-            </p>
-
-            <h2 style="margin-top: 30px;">The Technology Under the Hood</h2>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
-                <div class="card-shadow" style="padding: 20px;">
-                    <h3 style="color: #EAB308;"><i class="fas fa-robot"></i> spaCy for Parsing</h3>
-                    <p>
-                        We use <strong>spaCy</strong>, an industrial-strength NLP library, to efficiently extract key entities like skills, education, experience, and contact details from unstructured resumes and job descriptions.
-                    </p>
-                </div>
-
-                <div class="card-shadow" style="padding: 20px;">
-                    <h3 style="color: #EF4444;"><i class="fas fa-layer-group"></i> Semantic Matching (BERT/TF-IDF)</h3>
-                    <p>
-                        For matching, we leverage advanced models like <strong>BERT</strong> and <strong>TF-IDF</strong> to understand context and meaning, calculating semantic similarity between job requirements and candidate profiles.
-                    </p>
-                </div>
-
-                <div class="card-shadow" style="padding: 20px;">
-                    <h3 style="color: #10B981;"><i class="fas fa-chart-line"></i> Data-Driven Ranking</h3>
-                    <p>
-                        The system generates a quantitative <strong>Match Score</strong> and ranks candidates based on skill overlap, experience, and education fit—helping HR teams shortlist faster and smarter.
-                    </p>
-                </div>
-            </div>
+    <!-- Page main container -->
+    <main class="container-custom about-page">
+      <!-- 1) Hero section with a strong headline about smarter hiring -->
+      <section class="about-hero">
+        <div class="hero-content">
+          <h1>Smarter hiring. Faster results.</h1>
+          <p class="lead">
+            Empower your recruiting team to find the right people, reduce
+            time-to-hire, and make hiring decisions with confidence.
+          </p>
+          <div class="hero-cta">
+            <a class="btn-primary" href="{{ url_for('index') }}">Get started</a>
+            <a class="btn" href="{{ url_for('contact') }}">Contact sales</a>
+          </div>
         </div>
+        <div class="hero-visuals" aria-hidden="true">
+          <!-- Professional icon set for visual balance -->
+          <i class="fas fa-briefcase fa-3x"></i>
+          <i class="fas fa-users fa-3x"></i>
+          <i class="fas fa-chart-line fa-3x"></i>
+        </div>
+      </section>
+
+      <!-- 2) Section explaining HR hiring challenges -->
+      <section class="about-section">
+        <h2>Why choose ThinkHire</h2>
+        <p>
+          Hiring teams face growing pressure to fill roles quickly without
+          compromising quality. Common pain points include:
+        </p>
+        <div class="about-cards">
+          <div class="card">
+            <i class="fas fa-stopwatch card-icon"></i>
+            <h3>Long time-to-hire</h3>
+            <p>
+              Lengthy screening and manual workflows slow down hiring and cost
+              valuable weeks.
+            </p>
+          </div>
+          <div class="card">
+            <i class="fas fa-clipboard-list card-icon"></i>
+            <h3>Inconsistent screening</h3>
+            <p>
+              Different reviewers and unstructured resumes make comparisons
+              difficult and subjective.
+            </p>
+          </div>
+          <div class="card">
+            <i class="fas fa-user-clock card-icon"></i>
+            <h3>High volume, limited time</h3>
+            <p>
+              Recruiters juggle many roles and need tools that sort and surface
+              strong candidates fast.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 'How ThinkHire helps HR teams' section removed per request -->
+
+        </div>
+      </section>
     </main>
 
     <footer>
-        <div class="container-custom">
-            &copy; 2025 AI Matcher | All Rights Reserved.
-        </div>
+      <div class="container-custom">
+        &copy; 2025 ThinkHire | All rights reserved.
+      </div>
     </footer>
-</body>
+  </body>
 </html>

@@ -1,59 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | AI Matcher</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | ThinkHire</title>
 
-    <!-- Link static CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
 
-<body class="auth-wrapper">
-    <div class="card-shadow auth-box">
-        <h2 style="margin-bottom: 30px;">🔐 Account Access</h2>
+  <body class="auth-wrapper dashboard-theme">
+    <div class="login-split container-custom">
+      <div class="split-left">
+        <div class="login-card glass-effect">
+          <div class="brand">
+            <div class="brand-logo"><i class="fas fa-search"></i></div>
+            <div class="brand-name">🔍 ThinkHire</div>
+          </div>
 
-    <!-- Flask login form -->
-    <form id="loginForm" method="POST" action="{{ url_for('login') }}">
-            <input type="text" name="username" class="form-control" placeholder="Username" required>
-            <input type="password" name="password" class="form-control" placeholder="Password" required>
-            
-            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Login</button>
-        </form>
+          <h3 class="welcome">Welcome Back!</h3>
+          <p class="lead">Login to your account</p>
 
-        <!-- Display Flask flash messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <div style="margin-top: 15px;">
+          <form method="POST" action="{{ url_for('login') }}">
+            <div class="input-group">
+              <span class="icon"><i class="fas fa-user"></i></span>
+              <input
+                type="text"
+                name="username"
+                class="form-control"
+                placeholder="Username"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <span class="icon"><i class="fas fa-lock"></i></span>
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                placeholder="Password"
+                required
+              />
+            </div>
+
+            <div class="forgot"><a href="#">Forgot password?</a></div>
+
+            <button type="submit" class="btn-primary btn-login">Login</button>
+          </form>
+
+          {% with messages = get_flashed_messages(with_categories=true) %} {% if
+          messages %}
+          <div style="margin-top: 15px">
             {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
+            <div class="alert alert-{{ category }}">{{ message }}</div>
             {% endfor %}
+          </div>
+          {% endif %} {% endwith %}
+
+          <div class="auth-footer">
+            Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a>
+          </div>
         </div>
-        {% endif %}
-        {% endwith %}
+      </div>
 
-        <p style="margin: 20px 0 10px 0; color: var(--text-medium);">
-            Don’t have an account? <a href="{{ url_for('signup') }}">Sign Up</a>
-        </p>
-        
-        <!-- 'Continue as Guest' button removed per request -->
+      <aside class="split-right" aria-hidden="false">
+        <div class="brand-visuals">
+          <div class="floating-icon"><i class="fas fa-search"></i></div>
+          <h1 class="brand-title">ThinkHire</h1>
+          <p class="brand-desc">
+            AI-powered resume screening that helps HR teams<br />find the right
+            talent faster and smarter.
+          </p>
 
-        <!-- Link to standalone signup page -->
+          <div class="checks">
+            <div class="check">✔</div>
+            <div class="check">✔</div>
+            <div class="check">✔</div>
+          </div>
+          <!-- decorative floating background icons -->
+          <i class="bg-icon fas fa-search" aria-hidden="true"></i>
+          <i class="bg-icon fas fa-file-alt" aria-hidden="true"></i>
+          <i class="bg-icon fas fa-brain" aria-hidden="true"></i>
+        </div>
+      </aside>
     </div>
-
-    <!-- Optional JavaScript -->
-    <script>
-    document.getElementById("show-signup")?.addEventListener("click", (e) => {
-        e.preventDefault();
-        document.getElementById("loginForm")?.style.display = "none";
-        document.getElementById("signupForm")?.style.display = "block";
-    });
-
-    document.getElementById("show-login")?.addEventListener("click", (e) => {
-        e.preventDefault();
-        document.getElementById("signupForm")?.style.display = "none";
-        document.getElementById("loginForm")?.style.display = "block";
-    });
-    </script>
-</body>
+  </body>
 </html>

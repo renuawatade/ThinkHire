@@ -1,40 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up | AI Matcher</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up | ThinkHire</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <style>
-        /* Small centering for the signup box to match login */
+      /* Small centering for the signup box to match login */
     </style>
-</head>
-<body class="auth-wrapper">
-    <div class="card-shadow auth-box">
-        <h2 style="margin-bottom: 20px;">Create an account</h2>
-        <form method="POST" action="{{ url_for('signup') }}">
-            <input type="text" name="full_name" class="form-control" placeholder="Full Name">
-            <input type="text" name="username" class="form-control" placeholder="Username" required>
-            <input type="email" name="email" class="form-control" placeholder="Email Address" required>
-            <input type="password" name="password" class="form-control" placeholder="Password" required>
-            <input type="password" name="confirm_password" class="form-control" placeholder="Confirm Password" required>
-            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Sign Up</button>
-        </form>
+  </head>
+  <body
+    class="auth-wrapper"
+    style="background-image: url('{{ url_for("static", filename="images/background.jpg") }}'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;"
+  >
+    <div class="auth-box login-card">
+      <div class="brand">
+        <div class="brand-logo"><i class="fas fa-search"></i></div>
+        <div class="brand-name">ThinkHire</div>
+      </div>
 
-        <p style="margin: 20px 0 10px 0; color: var(--text-medium);">
-            Already have an account? <a href="{{ url_for('login') }}">Log in</a>
-        </p>
+      <h3 class="welcome">Create an account</h3>
+      <p class="lead">Sign up to get started</p>
 
-        <!-- Display Flask flash messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <div style="margin-top: 15px;">
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
+      <form method="POST" action="{{ url_for('signup') }}">
+        <div class="input-group">
+          <span class="icon"><i class="fas fa-user"></i></span>
+          <input type="text" name="full_name" class="form-control" placeholder="Full Name" />
         </div>
-        {% endif %}
-        {% endwith %}
+
+        <div class="input-group">
+          <span class="icon"><i class="fas fa-user-circle"></i></span>
+          <input type="text" name="username" class="form-control" placeholder="Username" required />
+        </div>
+
+        <div class="input-group">
+          <span class="icon"><i class="fas fa-envelope"></i></span>
+          <input type="email" name="email" class="form-control" placeholder="Email Address" required />
+        </div>
+
+        <div class="input-group">
+          <span class="icon"><i class="fas fa-lock"></i></span>
+          <input type="password" name="password" class="form-control" placeholder="Password" required />
+        </div>
+
+        <div class="input-group">
+          <span class="icon"><i class="fas fa-lock"></i></span>
+          <input type="password" name="confirm_password" class="form-control" placeholder="Confirm Password" required />
+        </div>
+
+        <button type="submit" class="btn-primary btn-login">Sign Up</button>
+      </form>
+
+      <p style="margin: 20px 0 10px 0; color: var(--text-medium)">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+
+      <!-- Display Flask flash messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+      <div style="margin-top: 15px">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
     </div>
-</body>
+  </body>
 </html>

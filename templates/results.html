@@ -1,118 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Results | AI Matcher</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Results | ThinkHire</title>
 
     <!-- Load static CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-    <header>
-        <div class="container-custom navbar">
-            <div class="logo">AI Matcher</div>
-            <nav class="nav-links">
-                <a href="{{ url_for('index') }}">Dashboard</a>
-                <a href="{{ url_for('about') }}">About</a>
-                <a href="{{ url_for('contact') }}">Contact</a>
-                <a href="{{ url_for('logout') }}">Logout</a>
-            </nav>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Unified header: brand + nav consistent with dashboard -->
+    <header class="glass-header">
+      <div class="container-custom navbar">
+        <div class="logo" aria-label="ThinkHire brand">
+          <span class="brand-emoji" aria-hidden="true">💼</span>
+          <span class="brand-text">ThinkHire</span>
         </div>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="{{ url_for('index') }}">Dashboard</a>
+          <a href="{{ url_for('about') }}">About</a>
+          <a href="{{ url_for('contact') }}">Contact</a>
+          <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+      </div>
     </header>
 
-    <main class="container-custom" style="padding: 40px 20px;">
-        <div class="card-shadow">
-            <h1 style="margin-bottom: 20px;">Candidate Matching Results</h1>
-            <p style="color: var(--text-medium);">Results based on semantic analysis of uploaded resumes against the Job Description.</p>
-
-            <div style="display: flex; gap:12px; justify-content: flex-start; margin-bottom: 20px;">
-                <a href="{{ url_for('download_csv') }}" class="btn-primary" style="background-color: #0369A1;">
-                    <i class="fas fa-file-csv"></i> Download CSV
-                </a>
-                <a href="{{ url_for('index') }}" class="btn-primary" style="background-color: #64748B; margin-left: auto;">
-                    <i class="fas fa-redo"></i> New Analysis
-                </a>
-            </div>
-
-            <!-- Candidate Results Table -->
-            <div class="table-responsive">
-                <table class="results-table">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Candidate Name</th>
-                            <th>Match Score</th>
-                            <th>Top Skills</th>
-                            <th>Suggestions for Improvement</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% if resumes_info %}
-                            {% for candidate in resumes_info %}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                <td>{{ candidate.Name if candidate.Name else candidate.FileName }}</td>
-                                <td style="width: 260px;">
-                                    {% set pct = (candidate.Score | float) * 100 %}
-                                    {% if pct >= 75 %}
-                                        {% set bar_class = 'score-green' %}
-                                    {% elif pct >= 50 %}
-                                        {% set bar_class = 'score-yellow' %}
-                                    {% else %}
-                                        {% set bar_class = 'score-red' %}
-                                    {% endif %}
-                                    <div style="display:flex; align-items:center; gap:12px;">
-                                        <div style="flex:1; background:#e6eef6; border-radius:6px; height:18px; overflow:hidden;">
-                                            <div class="score-bar {{ bar_class }}" style="width: {{ '%.2f'|format(pct) }}%;"></div>
-                                        </div>
-                                        <div style="min-width:56px; text-align:right; font-weight:600;">{{ '%.1f'|format(pct) }}%</div>
-                                    </div>
-                                </td>
-                                <td>
-                                    {% if candidate.Skills %}
-                                        {{ candidate.Skills | join(", ") }}
-                                    {% else %}
-                                        <em>No skills parsed</em>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if candidate.Suggestions %}
-                                        {% if candidate.Suggestions is sequence and not candidate.Suggestions is string %}
-                                            {{ candidate.Suggestions | join(', ') }}
-                                        {% else %}
-                                            {{ candidate.Suggestions }}
-                                        {% endif %}
-                                    {% else %}
-                                        <em>No suggestions</em>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        {% else %}
-                            <tr>
-                                <td colspan="5" style="text-align: center;">No candidates found.</td>
-                            </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Job Description Section -->
-            <h3 style="margin-top: 40px;">Job Description Used</h3>
-            <div class="card-shadow" style="padding: 15px; background-color: var(--secondary-light); font-size: 0.95rem;">
-                <p id="jdTextDisplay">
-                    {{ jd_text if jd_text else "No job description provided." }}
-                </p>
-            </div>
+    <main class="container-custom" style="padding: 40px 20px">
+      <div
+        class="page-header"
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          margin-bottom: 18px;
+        "
+      >
+        <div>
+          <h1 style="margin: 0 0 6px 0">Candidate Matching Results</h1>
+          <p style="margin: 0; color: var(--text-muted)">
+            Results based on AI semantic matching between Job Description and
+            Resumes
+          </p>
         </div>
+
+        <div style="display: flex; gap: 12px; align-items: center">
+          <a href="{{ url_for('index') }}" class="btn">
+            <i class="fas fa-redo"></i> New Analysis</a
+          >
+          <a href="{{ url_for('download_csv') }}" class="btn-primary">
+            <i class="fas fa-file-csv"></i> Download CSV</a
+          >
+        </div>
+      </div>
+
+      <div class="candidates-list">
+        {% if resumes_info %} {% for candidate in resumes_info %} {% set pct =
+        (candidate.Score | float) * 100 %} {% if pct >= 71 %} {% set bar_class =
+        'score-green' %} {% elif pct >= 41 %} {% set bar_class = 'score-yellow'
+        %} {% else %} {% set bar_class = 'score-red' %} {% endif %}
+
+        <article class="candidate-card card-shadow">
+          <div class="candidate-left">
+            <div class="rank-badge">{{ loop.index }}</div>
+          </div>
+
+          <div class="candidate-main">
+            <div class="candidate-header">
+              <div class="candidate-name">
+                {{ candidate.Name if candidate.Name else candidate.FileName }}
+              </div>
+              <div class="score-block">
+                <div class="progress" style="width: 220px">
+                  <div
+                    class="progress-fill {{ bar_class }}"
+                    style="--pct: {{ '%.2f'|format(pct) }}%;"
+                  ></div>
+                </div>
+                <div class="score-label">{{ '%.1f'|format(pct) }}%</div>
+              </div>
+            </div>
+
+            <div class="skills-row">
+              {% if candidate.Skills %} {% for s in candidate.Skills %}
+              <span class="skill-pill">{{ s }}</span>
+              {% endfor %} {% else %}
+              <em>No skills parsed</em>
+              {% endif %}
+            </div>
+
+            <details class="suggestions">
+              <summary>Suggestions for Improvement</summary>
+              <div class="suggestions-body">
+                {% if candidate.Suggestions %} {% if candidate.Suggestions is
+                sequence and not candidate.Suggestions is string %}
+                <ul>
+                  {% for s in candidate.Suggestions %}
+                  <li>{{ s }}</li>
+                  {% endfor %}
+                </ul>
+                {% else %}
+                <p>{{ candidate.Suggestions }}</p>
+                {% endif %} {% else %}
+                <p>No suggestions</p>
+                {% endif %}
+              </div>
+            </details>
+          </div>
+        </article>
+        {% endfor %} {% else %}
+        <div class="card-shadow" style="text-align: center; padding: 28px">
+          No candidates found.
+        </div>
+        {% endif %}
+      </div>
+
+      <h3 style="margin-top: 28px">Job Description Used</h3>
+      <div class="card-shadow" style="padding: 15px; font-size: 0.95rem">
+        <p id="jdTextDisplay">
+          {{ jd_text if jd_text else "No job description provided." }}
+        </p>
+      </div>
     </main>
 
     <footer>
-        <div class="container-custom">
-            &copy; 2025 AI Matcher | All Rights Reserved.
-        </div>
+      <div class="container-custom">
+        &copy; 2025 ThinkHire | All Rights Reserved.
+      </div>
     </footer>
-</body>
+  </body>
 </html>

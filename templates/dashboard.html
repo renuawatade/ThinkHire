@@ -1,88 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | AI Matcher</title>
-
-    <!-- Flask static link -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-    <header>
-        <div class="container-custom navbar">
-            <div class="logo"> AI Matcher</div>
-            <nav class="nav-links">
-                <a href="{{ url_for('index') }}">Dashboard</a>
-                <a href="{{ url_for('about') }}">About</a>
-                <a href="{{ url_for('contact') }}">Contact</a>
-                <a href="{{ url_for('logout') }}">Logout</a>
-            </nav>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | ThinkHire AI</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body class="dashboard-theme">
+    <!-- Header layout: brand on the left, navigation on the right. -->
+    <header class="glass-header">
+      <div class="container-custom navbar">
+        <!-- Brand: visually dominant, large, bold, high-contrast -->
+        <!-- Pinned to the left side of the viewport and includes a briefcase emoji as brand mark -->
+        <div class="logo" aria-label="ThinkHire brand">
+          <span class="brand-emoji" aria-hidden="true">💼</span>
+          <span class="brand-text">ThinkHire</span>
         </div>
+        <!-- Navigation: horizontal, spaced, hover effects applied via CSS -->
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="{{ url_for('index') }}">Dashboard</a>
+          <a href="{{ url_for('about') }}">About</a>
+          <a href="{{ url_for('contact') }}">Contact</a>
+          <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+      </div>
     </header>
 
-    <main class="container-custom" style="padding: 40px 20px;">
-        <h1 style="margin-bottom: 10px;"> Candidate Matching Dashboard</h1>
-        <p style="color: var(--text-medium); margin-bottom: 30px;">Upload a Job Description and multiple Resumes to begin the AI analysis.</p>
+    <!-- Floating emojis: decorative professional icons that animate slowly in the background. -->
+    <!-- Kept non-interactive (aria-hidden) and low-opacity so they don't interfere with content. -->
+    <div class="floating-emojis" aria-hidden="true">
+      <span class="emoji e1">👨‍💼</span>
+      <span class="emoji e2">👩‍💻</span>
+      <span class="emoji e3">📄</span>
+      <span class="emoji e4">🧠</span>
+      <span class="emoji e5">📊</span>
+      <span class="emoji e6">💼</span>
+      <span class="emoji e7">🎯</span>
+    </div>
 
-        <!-- Flask upload form -->
-        <form method="POST" action="{{ url_for('upload_files') }}" enctype="multipart/form-data">
-            <div class="dashboard-grid">
-                <div class="card-shadow">
-                    <h2>Job Description (JD)</h2>
-                    <div class="upload-zone">
-                        <i class="fas fa-file-upload fa-3x" style="color: var(--primary-blue);"></i>
-                        <p style="margin-top: 10px;">Upload JD (PDF/DOCX/TXT)</p>
-                        <input type="file" name="jd_file" accept=".pdf,.docx,.txt" required>
-                    </div>
-                </div>
+    <main class="container-custom page-content">
+      <div class="dashboard-intro">
+        <h1>Candidate Matching Dashboard</h1>
+        <p>
+          Upload a Job Description and multiple Resumes to begin the AI
+          analysis.
+        </p>
+      </div>
 
-                <div class="card-shadow">
-                    <h2>Candidate Resumes</h2>
-                    <div class="upload-zone">
-                        <i class="fas fa-folder-open fa-3x" style="color: #10B981;"></i>
-                        <p style="margin-top: 10px;">Upload a ZIP file (one or more) or select a folder containing resumes</p>
-                        <div style="display:flex; gap:12px; align-items:center; justify-content:center; flex-wrap:wrap;">
-                            <div style="text-align:center;">
-                                <label class="btn-primary" style="cursor:pointer; padding:10px 14px; display:inline-block;">
-                                    <i class="fas fa-file-archive"></i> Choose ZIP(s)
-                                    <input type="file" name="resume_zips" accept=".zip" multiple style="display:none;">
-                                </label>
-                            </div>
-                            <div style="text-align:center;">
-                                <label class="btn-primary" style="cursor:pointer; padding:10px 14px; display:inline-block;">
-                                    <i class="fas fa-folder-open"></i> Choose Folder
-                                    <input type="file" name="resume_files" webkitdirectory directory multiple style="display:none;">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <form
+        method="POST"
+        action="{{ url_for('upload_files') }}"
+        enctype="multipart/form-data"
+      >
+        <div class="dashboard-grid">
+          <div class="card-shadow glass-card">
+            <h2>Job Description (JD)</h2>
+            <div class="upload-zone">
+              <i class="fas fa-file-upload upload-icon"></i>
+              <p>Upload JD (PDF/DOCX/TXT)</p>
+              <input
+                type="file"
+                name="jd_file"
+                accept=".pdf,.docx,.txt"
+                required
+              />
             </div>
+          </div>
 
-            <div class="card-shadow" style="text-align: center; margin-top: 30px;">
-                <button type="submit" class="btn-primary" style="padding: 15px 50px; font-size: 1.1rem;">
-                    <i class="fas fa-brain"></i> Start AI Analysis
-                </button>
+          <div class="card-shadow glass-card">
+            <h2>Candidate Resumes</h2>
+            <div class="upload-zone">
+              <i
+                class="fas fa-folder-open upload-icon"
+                style="color: #10b981"
+              ></i>
+              <p>Upload ZIP file or select a folder</p>
+              <div class="button-row">
+                <label class="btn-primary custom-file-btn">
+                  <i class="fas fa-file-archive"></i> Choose ZIP(s)
+                  <input
+                    type="file"
+                    name="resume_zips"
+                    accept=".zip"
+                    multiple
+                    class="file-input-hidden"
+                  />
+                </label>
+                <label class="btn-primary custom-file-btn">
+                  <i class="fas fa-folder-open"></i> Choose Folder
+                  <input
+                    type="file"
+                    name="resume_files"
+                    webkitdirectory
+                    directory
+                    multiple
+                    class="file-input-hidden"
+                  />
+                </label>
+              </div>
             </div>
-        </form>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <div style="margin-top: 20px;">
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
+          </div>
         </div>
-        {% endif %}
-        {% endwith %}
+
+        <div class="action-footer">
+          <button type="submit" class="btn-primary main-btn">
+            🚀 Start AI Analysis
+          </button>
+        </div>
+      </form>
+
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %}
+      <div class="alert-container">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
     </main>
 
     <footer>
-        <div class="container-custom">
-            &copy; 2025 AI Matcher | All Rights Reserved.
-        </div>
+      <div class="container-custom">
+        &copy; 2025 ThinkHire | All Rights Reserved.
+      </div>
     </footer>
-</body>
+  </body>
 </html>

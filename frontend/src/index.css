@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom small utilities to match design */
+.header-shadow { box-shadow: 0 2px 6px rgba(2,6,23,0.06); }
+.card { @apply bg-white rounded-xl p-6 border border-slate-100 shadow-sm; }
+.btn-primary { @apply bg-primary text-white font-semibold rounded-lg px-4 py-2 hover:bg-blue-600 transition; }
+.dropzone { @apply border-2 border-dashed border-slate-200 rounded-lg p-6 text-center bg-slate-50 hover:border-primary transition; }

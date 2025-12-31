@@ -1,66 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us | AI Matcher</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us | ThinkHire</title>
 
     <!-- Static CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-    <header>
-        <div class="container-custom navbar">
-            <div class="logo">AI Matcher</div>
-            <nav class="nav-links">
-                <a href="{{ url_for('index') }}">Dashboard</a>
-                <a href="#">About</a>
-                <a href="{{ url_for('contact') }}">Contact</a>
-                <a href="{{ url_for('logout') }}">Logout</a>
-            </nav>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Unified header (ThinkHire) -->
+    <header class="glass-header">
+      <div class="container-custom navbar">
+        <div class="logo" aria-label="ThinkHire brand">
+          <span class="brand-emoji" aria-hidden="true">💼</span>
+          <span class="brand-text">ThinkHire</span>
         </div>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="{{ url_for('index') }}">Dashboard</a>
+          <a href="{{ url_for('about') }}">About</a>
+          <a href="{{ url_for('contact') }}">Contact</a>
+          <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+      </div>
     </header>
 
-    <main class="container-custom" style="padding: 40px 20px;">
-        <div class="card-shadow" style="max-width: 600px; margin: 0 auto; text-align: center;">
-            <h1 style="margin-bottom: 20px;">
-                <i class="fas fa-envelope" style="margin-right: 10px; color: var(--primary-blue);"></i>
-                Get In Touch
-            </h1>
-            
-            <p style="color: var(--text-medium); margin-bottom: 30px;">
-                Have questions about enterprise features or custom integrations? Send us a message!
-            </p>
+    <main class="container-custom" style="padding: 40px 20px">
+      <div
+        class="card-shadow"
+        style="max-width: 600px; margin: 0 auto; text-align: center"
+      >
+        <h1 style="margin-bottom: 20px">
+          <i
+            class="fas fa-envelope"
+            style="margin-right: 10px; color: var(--primary-blue)"
+          ></i>
+          Get In Touch
+        </h1>
 
-            <!-- Flask contact form -->
-            <form method="POST" action="{{ url_for('contact') }}">
-                <input type="text" name="name" class="form-control" placeholder="Your Name" required>
-                <input type="email" name="email" class="form-control" placeholder="Your Email" required>
-                <textarea name="message" class="form-control" rows="5" placeholder="Your Message..." style="resize: none;" required></textarea>
+        <p style="color: var(--text-medium); margin-bottom: 30px">
+          Have questions about enterprise features or custom integrations? Send
+          us a message!
+        </p>
 
-                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">
-                    Send Message
-                </button>
-            </form>
+        <!-- Flask contact form -->
+        <form method="POST" action="{{ url_for('contact') }}">
+          <input
+            type="text"
+            name="name"
+            class="form-control"
+            placeholder="Your Name"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            class="form-control"
+            placeholder="Your Email"
+            required
+          />
+          <textarea
+            name="message"
+            class="form-control"
+            rows="5"
+            placeholder="Your Message..."
+            style="resize: none"
+            required
+          ></textarea>
 
-            <!-- Flash messages -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-            <div style="margin-top: 15px;">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            </div>
-            {% endif %}
-            {% endwith %}
+          <button
+            type="submit"
+            class="btn-primary"
+            style="width: 100%; margin-top: 10px"
+          >
+            Send Message
+          </button>
+        </form>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %}
+        <div style="margin-top: 15px">
+          {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
         </div>
+        {% endif %} {% endwith %}
+      </div>
     </main>
 
     <footer>
-        <div class="container-custom">
-            &copy; 2025 AI Matcher | All Rights Reserved.
-        </div>
+      <div class="container-custom">
+        &copy; 2025 ThinkHire | All Rights Reserved.
+      </div>
     </footer>
-</body>
+  </body>
 </html>

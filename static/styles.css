@@ -1,288 +1,413 @@
 /* styles.css */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@300;400;600;700&display=swap');
 
-:root {
-    --primary-blue: #2563EB; /* Main Corporate Blue */
-    --secondary-light: #F8FAFC; /* Light Gray Background/Card Accent */
-    --text-dark: #1E293B;
-    --text-medium: #475569;
-    --border-light: #E2E8F0;
-    --shadow-card: 0 4px 12px rgba(37, 99, 235, 0.1), 0 1px 3px rgba(37, 99, 235, 0.08);
-    --border-radius-lg: 12px;
-}
+:root{
+    /* Warm HR SaaS palette */
+    --warm-1: #F6C453; /* gradient start */
+    --warm-2: #FBE7B2; /* gradient end */
+    --primary: #2563EB; /* blue primary */
+    --primary-strong: #1f4ed8;
+    --text-dark: #071024; /* headings */
+    --text-muted: #516277; /* secondary text */
+    --card-bg: #ffffff;
+    --input-bg: #f8fafc;
+    --danger: #ef4444;
 
-/* --- Base & Typography --- */
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: var(--secondary-light);
-    color: var(--text-dark);
-    margin: 0;
-    padding: 0;
-}
+    /* Shadows & radius */
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 20px;
+    --soft-shadow: 0 10px 30px rgba(2,6,23,0.08);
+    --elev-1: 0 8px 24px rgba(2,6,23,0.06);
 
-h1, h2, h3, h4, h5 {
-    color: var(--text-dark);
-    font-weight: 700;
-}
-
-a {
-    color: var(--primary-blue);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-a:hover {
-    color: #1D4ED8; /* Darker blue on hover */
+    /* type scale */
+    --h1: 2rem;
+    --h2: 1.125rem;
+    /* score colors */
+    --score-green: #10b981;
+    --score-yellow: #f59e0b;
+    --score-red: #ef4444;
+    --glass-bg: rgba(255,255,255,0.6);
 }
 
-/* --- Layout Components --- */
-.container-custom {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+/* --- Base --- */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:Inter, Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:linear-gradient(180deg,var(--warm-1), var(--warm-2)); color:var(--text-dark); -webkit-font-smoothing:antialiased}
+
+/* Decorative background image (if present) used as subtle hero on the right */
+body.dashboard-theme{position:relative;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+/* Make the decorative background image slightly more visible */
+body.dashboard-theme::after{content:"";position:fixed;right:-60px;top:8%;width:520px;height:520px;background-image:url('../static/images/Gemini_Generated_Image_5tgrbk5tgrbk5tgr.png');background-size:cover;background-position:center;opacity:0.06;filter:grayscale(30%) contrast(95%);pointer-events:none;z-index:0}
+
+/* Layout allocations for dashboard: header 10vh, intro 15vh, upload 55vh, action area 10vh, footer 10vh */
+body.dashboard-theme header, body.dashboard-theme .glass-header{flex:0 0 10vh;height:10vh;display:flex;align-items:center}
+body.dashboard-theme main.container-custom{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+body.dashboard-theme footer{flex:0 0 10vh;height:10vh}
+
+/* --- Utility & layout helpers --- */
+.container{max-width:1200px;margin:0 auto;padding:24px}
+
+.container-custom{max-width:1250px;margin:0 auto;padding:20px;position:relative;z-index:2}
+.center{display:flex;align-items:center;justify-content:center}
+
+/* --- Glass card base used across the app --- */
+.glass-effect{background:var(--glass-bg);backdrop-filter:blur(8px) saturate(140%);-webkit-backdrop-filter:blur(8px) saturate(140%);border-radius:var(--radius-md);border:1px solid rgba(255,255,255,0.04);box-shadow:var(--elev-1)}
+
+/* Generic card used across templates */
+.card-shadow{background:var(--card-bg);border-radius:var(--radius-md);box-shadow:var(--soft-shadow);padding:20px;border:1px solid rgba(15,20,36,0.04);color:var(--text-dark)}
+
+/* --- Auth / Login Page --- */
+.auth-wrapper{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px;position:relative;overflow:hidden}
+/* use the existing image as background for auth; add dark overlay for readability */
+.auth-wrapper::before{content:"";position:absolute;inset:0;background-image:url('../static/images/Gemini_Generated_Image_5tgrbk5tgrbk5tgr.png');background-size:cover;background-position:center;filter:brightness(0.45) saturate(85%);z-index:0}
+.auth-wrapper::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,10,21,0.55),rgba(2,6,23,0.6));z-index:1}
+.login-card{position:relative;z-index:3;width:100%;max-width:420px;padding:28px;background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));border-radius:20px;box-shadow:0 18px 50px rgba(15,20,36,0.10);border:1px solid rgba(15,20,36,0.06);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transform-origin:center;animation:fadeInUp .7s cubic-bezier(.2,.9,.2,1) both}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.brand-logo{width:44px;height:44px;border-radius:10px;background:transparent;display:flex;align-items:center;justify-content:center;color:var(--primary);font-weight:800;font-size:1.05rem}
+.brand-name{font-weight:800;font-size:1.05rem;color:var(--text-dark)}
+.welcome{font-size:var(--h1);margin:8px 0;color:var(--text-dark)}
+.lead{color:var(--text-muted);margin-bottom:16px}
+
+/* simple appear animation for card */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* --- Split-screen layout for login --- */
+.login-split{display:flex;gap:0;align-items:center;height:100vh;padding-top:28px;padding-bottom:28px}
+.split-left{flex:0 0 44%;display:flex;align-items:center;justify-content:center;padding:24px}
+.split-right{flex:0 0 56%;display:flex;align-items:center;justify-content:center;padding:48px;position:relative;overflow:visible}
+
+/* Make the two panels (login card and visuals) the same size and centered.
+    Use a responsive fixed card size for desktop/tablet, and allow full-width on small screens. */
+.auth-panel-size{width:520px;max-width:92vw;height:640px;box-sizing:border-box;border-radius:20px}
+
+.login-card{width:520px;max-width:92vw;height:640px;padding:28px;background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));border-radius:20px;box-shadow:0 18px 50px rgba(15,20,36,0.10);border:1px solid rgba(15,20,36,0.06);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transform-origin:center;animation:fadeInUp .7s cubic-bezier(.2,.9,.2,1) both}
+
+/* Style the right panel to match the left card size and visual weight */
+.split-right .brand-visuals{width:520px;max-width:92vw;height:640px;padding:36px;border-radius:20px;background:linear-gradient(180deg,var(--warm-1),var(--warm-2));box-shadow:var(--elev-1);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+
+/* Ensure inner elements don't overflow and keep spacing consistent */
+.split-right .brand-title{margin-top:12px}
+.split-right .brand-desc{max-width:420px;margin:12px auto}
+
+/* Remove legacy left margin forcing the login card off-center */
+.split-left .login-card{margin-left:0;max-width:none}
+
+/* Right branding visuals */
+.split-right .brand-visuals{width:100%;max-width:520px;text-align:center;color:var(--text-dark);position:relative}
+.split-right{background:linear-gradient(180deg,var(--warm-1),var(--warm-2));box-shadow:var(--elev-1);border-radius:var(--radius-lg);overflow:hidden}
+.brand-title{font-family:Inter, Poppins, sans-serif;font-size:2.6rem;margin:10px 0 8px 0;font-weight:800}
+.brand-desc{color:rgba(7,16,36,0.75);font-size:1.05rem;line-height:1.35;margin:0 0 18px}
+
+/* floating magnifying glass */
+.floating-icon{width:110px;height:110px;border-radius:999px;background:linear-gradient(180deg,#fff,#fff);display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:44px;color:var(--primary);box-shadow:0 18px 38px rgba(15,20,36,0.10);animation:float 4s ease-in-out infinite}
+@keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-12px)}100%{transform:translateY(0)}}
+
+/* moving checks */
+.checks{display:flex;gap:18px;justify-content:center;margin-top:18px}
+.check{width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,0.95);display:flex;align-items:center;justify-content:center;color:var(--primary);font-weight:800;box-shadow:0 8px 20px rgba(15,20,36,0.06);transform:translateY(0);animation:checks 2.6s linear infinite}
+@keyframes checks{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+
+/* Ensure login card is centered-left */
+.split-left .login-card{margin-left:6%;max-width:420px}
+
+/* Input focus and button hover for accessibility */
+.form-control:focus{box-shadow:0 12px 36px rgba(37,99,235,0.16);border-color:var(--primary);transform:translateY(-1px);outline:none}
+.btn-login{transition:transform .12s ease,box-shadow .12s}
+.btn-login:hover{transform:scale(1.02);box-shadow:0 18px 40px rgba(37,99,235,0.12)}
+
+/* Background decorative icons inside right panel */
+.bg-icon{position:absolute;font-size:86px;color:rgba(2,6,23,0.06);filter:grayscale(30%);opacity:0.95}
+.bg-icon.fa-search{left:6%;top:8%;animation:floatSlow 6s ease-in-out infinite}
+.bg-icon.fa-file-alt{right:8%;top:18%;animation:floatSlow 7s ease-in-out infinite}
+.bg-icon.fa-brain{left:22%;bottom:6%;animation:floatSlow 9s ease-in-out infinite}
+@keyframes floatSlow{0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)}}
+
+/* Brand text fade-in */
+.brand-visuals .brand-title{opacity:0;transform:translateY(8px);animation:fadeInText .9s ease forwards .3s}
+.brand-visuals .brand-desc{opacity:0;transform:translateY(8px);animation:fadeInText .9s ease forwards .45s}
+.checks{opacity:0;animation:fadeInText .9s ease forwards .6s}
+@keyframes fadeInText{to{opacity:1;transform:none}}
+
+/* Mobile: stack with login first */
+@media (max-width: 880px){
+    .login-split{flex-direction:column;padding:18px;min-height:unset}
+    .split-left,.split-right{width:100%;justify-content:center}
+    .split-left .login-card{margin:0 auto}
+    .split-right{order:2;padding:28px}
+    .brand-title{font-size:1.8rem}
 }
 
-.card-shadow {
-    background-color: white;
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-card);
-    padding: 30px;
-    border: 1px solid var(--border-light);
+/* --- Form elements --- */
+.input-group{position:relative;margin-bottom:14px}
+.input-group .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:1.05rem}
+.form-control{width:100%;height:46px;padding:10px 14px 10px 42px;border-radius:12px;border:1px solid rgba(15,20,36,0.06);background:var(--input-bg);color:var(--text-dark);outline:none;transition:box-shadow .18s ease,transform .18s}
+.form-control::placeholder{color:rgba(7,16,36,0.35)}
+.form-control:focus{box-shadow:0 8px 24px rgba(37,99,235,0.12);border-color:var(--primary);transform:translateY(-1px)}
+
+.forgot{text-align:right;margin:8px 0 18px 0}
+.forgot a{color:var(--muted);text-decoration:none;font-size:0.92rem}
+
+/* --- Buttons --- */
+.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;padding:10px 14px;border:none;cursor:pointer;font-weight:700}
+.btn-primary{background:var(--primary);color:#fff;box-shadow:0 10px 30px rgba(37,99,235,0.12);transition:transform .15s ease,box-shadow .15s}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(37,99,235,0.16)}
+.btn-login{width:100%;padding:12px 16px;border-radius:12px;font-size:1rem}
+
+/* subtle button glow */
+.btn-primary:active{transform:translateY(0)}
+.btn-primary:focus{outline:2px solid rgba(37,99,235,0.18);outline-offset:2px}
+
+.auth-footer{margin-top:16px;text-align:center;color:var(--muted);font-size:0.95rem}
+.auth-footer a{color:var(--primary);font-weight:700;text-decoration:none}
+
+/* --- Page / Dashboard --- */
+.page-content{padding:0 20px}
+.dashboard-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;margin-top:0;align-items:stretch;justify-content:center;height:100%;min-height:0}
+
+/* Make JD and Resume cards crisp white for maximum contrast */
+.dashboard-grid > .glass-card, .dashboard-grid > .card-shadow {background:var(--card-bg);color:#071024;padding:18px;border-radius:16px;border:1px solid rgba(7,16,36,0.06);box-shadow:var(--soft-shadow);backdrop-filter: blur(6px);-webkit-backdrop-filter: blur(6px);display:flex;flex-direction:column;justify-content:center;transition:transform .18s ease,box-shadow .18s}
+
+/* Slight lift on hover */
+.dashboard-grid > .glass-card:hover, .dashboard-grid > .card-shadow:hover{transform:translateY(-8px);box-shadow:0 18px 40px rgba(8,16,36,0.12)}
+
+/* Ensure both cards fill the dashboard grid area (equal height) */
+.dashboard-grid > .glass-card, .dashboard-grid > .card-shadow{height:100%}
+
+/* Make cards' internal content centered and reduce padding to fit 100vh */
+.dashboard-grid > .glass-card > *, .dashboard-grid > .card-shadow > *{display:flex;flex-direction:column;justify-content:center}
+
+/* Header (navbar) adjustments to sit above overlay */
+.glass-header{position:relative;z-index:2;padding:14px 0}
+.navbar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+/* Brand: pinned to left viewport, includes emoji */
+.logo{font-weight:900;color:var(--text-dark);letter-spacing:0.4px;font-family:Poppins, Inter, sans-serif; /* Poppins prioritized for strong brand */
+    font-size:2.2rem; /* visually dominant brand */
+    display:flex;align-items:center;gap:10px;
+    position:fixed;left:18px;top:14px;z-index:6;/* pinned to left of viewport */
 }
 
-/* --- Header & Navigation --- */
-header {
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    padding: 15px 0;
+/* Add spacing inside the header container so nav doesn't overlap the fixed brand */
+.glass-header .container-custom{padding-left:110px}
+
+.brand-emoji{font-size:1.6rem;line-height:1;display:inline-block}
+.brand-text{font-weight:900}
+
+.nav-links{display:flex;gap:18px;align-items:center;position:fixed;top:18px;right:24px;z-index:8}
+.nav-links a{color:rgba(7,16,36,0.88);text-decoration:none;font-weight:800;display:inline-block;padding:8px 12px;font-size:1.2rem;transition:transform .18s ease,color .18s ease;border-radius:8px}
+/* Hover: subtle lift + color change for clarity (no JS required) */
+.nav-links a:hover{transform:translateY(-3px) scale(1.03);color:var(--primary-strong)}
+
+/* Also support other header structures used in index (nav-center / nav-right) */
+.nav-center, .nav-right{display:flex;gap:18px;align-items:center}
+.nav-center a, .nav-right a{font-size:1.15rem;font-weight:700;padding:8px 10px}
+
+/* Floating emoji decorations: low-opacity, slow animations so they stay subtle and professional */
+.floating-emojis{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:visible}
+.floating-emojis .emoji{position:absolute;font-size:64px;opacity:0.28;filter:none;transform-origin:center;will-change:transform;text-shadow:0 6px 18px rgba(7,10,21,0.12)}
+.floating-emojis .emoji.e1{left:4%;top:12%;font-size:68px;animation:floatEmoji 14s ease-in-out infinite}
+.floating-emojis .emoji.e2{right:6%;top:10%;font-size:78px;animation:floatEmoji 16s ease-in-out infinite;-webkit-animation-delay:1s;animation-delay:1s}
+.floating-emojis .emoji.e3{left:10%;bottom:12%;font-size:56px;animation:floatEmoji 12s ease-in-out infinite;animation-delay:2s}
+.floating-emojis .emoji.e4{right:18%;bottom:20%;font-size:70px;animation:floatEmoji 15s ease-in-out infinite;animation-delay:0.8s}
+.floating-emojis .emoji.e5{left:48%;top:6%;font-size:62px;animation:floatEmoji 11s ease-in-out infinite;animation-delay:3s}
+.floating-emojis .emoji.e6{right:30%;top:20%;font-size:56px;animation:floatEmoji 13s ease-in-out infinite;animation-delay:1.6s}
+.floating-emojis .emoji.e7{left:82%;top:6%;font-size:62px;animation:floatEmoji 17s ease-in-out infinite;animation-delay:2.2s}
+
+@keyframes floatEmoji{0%{transform:translateY(0) rotate(0deg) translateX(0)}25%{transform:translateY(-10px) rotate(-3deg) translateX(6px)}50%{transform:translateY(-4px) rotate(2deg) translateX(-6px)}75%{transform:translateY(-8px) rotate(-1deg) translateX(4px)}100%{transform:translateY(0) rotate(0deg) translateX(0)}}
+
+/* Keep emojis hidden on narrow mobile to avoid distraction */
+@media (max-width:1024px){
+    /* On tablet, keep nav inside header flow to avoid overlap */
+    .nav-links{position:static;right:auto;top:auto;padding-left:0;margin-left:auto}
+    .nav-links a{font-size:1.05rem}
+    .glass-header .container-custom{padding-left:110px}
 }
 
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+@media (max-width:768px){
+    .floating-emojis{display:none}
+    .logo{font-size:1.6rem;position:relative;left:0;top:0}
+    .nav-links{position:static;gap:12px;margin-top:8px}
+    .nav-links a{font-size:0.98rem;padding:6px 8px}
 }
 
-.logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--primary-blue);
+/* Ensure anchors with .btn-primary (links) match button styles */
+.btn-primary[href], a.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:linear-gradient(90deg,var(--primary),var(--primary-strong));color:#fff;text-decoration:none;border:none}
+
+/* Dashboard card headers */
+.dashboard-grid h2{margin:0 0 12px 0;font-size:1.15rem;color:var(--text-dark);font-weight:700}
+.dashboard-intro{flex:0 0 15vh;padding:10px 0}
+.dashboard-intro h1{color:var(--text-dark);margin:0 0 6px 0;font-size:1.6rem;font-weight:700;line-height:1.05}
+.dashboard-intro p{color:var(--text-muted);margin:0 0 8px 0}
+
+/* Form area: occupy remaining vertical space (65vh = upload 55vh + action 10vh) */
+body.dashboard-theme main.container-custom > form{flex:0 0 65vh;display:flex;flex-direction:column;min-height:0}
+body.dashboard-theme main.container-custom > form .dashboard-grid{flex:1;min-height:0}
+body.dashboard-theme main.container-custom > form .action-footer{flex:0 0 10vh;display:flex;align-items:center;justify-content:center;margin-top:0}
+
+/* Generic card and upload areas */
+.card-title{font-size:var(--h2);font-weight:700;margin-bottom:8px;color:var(--text)}
+.card-sub{color:var(--subtext);font-size:0.95rem;margin-bottom:12px}
+.upload-area{min-height:320px;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:18px;align-items:center;justify-content:center;background:transparent;border:2px dashed rgba(7,16,36,0.08)}
+.upload-area p{margin:0;color:var(--text-muted);font-weight:700;font-size:1.05rem;text-align:center}
+
+/* Center big upload icon */
+.upload-icon{font-size:56px;color:var(--primary);margin-bottom:6px}
+
+/* Style the plain file input inside JD area to look like a modern button but remain functional */
+.dashboard-grid > .glass-card input[type="file"], .dashboard-grid > .card-shadow input[type="file"]{display:inline-block;margin-top:12px;padding:12px 18px;border-radius:12px;border:1px solid rgba(15,20,36,0.06);background:var(--primary);color:#fff;cursor:pointer;font-weight:700}
+
+/* Custom file buttons already wrapped in labels - make them consistent */
+.custom-file-btn{display:inline-flex;align-items:center;gap:12px;padding:16px 20px;border-radius:20px;background:linear-gradient(90deg,var(--primary),var(--primary-strong));color:#fff;border:none;cursor:pointer;font-weight:800;font-size:1rem;box-shadow:0 10px 30px rgba(37,99,235,0.12);transition:transform .14s ease,box-shadow .14s}
+.custom-file-btn .fa-file-archive,.custom-file-btn .fa-folder-open{opacity:0.95;font-size:1.1rem}
+.file-input-hidden{position:absolute!important;left:-9999px}
+
+/* Buttons row spacing */
+.button-row{display:flex;gap:16px;flex-wrap:wrap}
+
+/* Primary CTA styling: pill-shaped, larger, blue gradient, hover animation */
+.main-btn{padding:16px 36px;font-size:1.125rem;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--primary-strong));color:#fff;border:none;cursor:pointer;box-shadow:0 12px 40px rgba(37,99,235,0.14);transition:transform .14s ease,box-shadow .14s}
+.main-btn:hover{transform:scale(1.03);box-shadow:0 22px 60px rgba(37,99,235,0.18)}
+
+/* Action footer CTA: prominent and centered */
+.action-footer{margin-top:20px;display:flex;justify-content:center;z-index:2}
+.main-btn{padding:14px 26px;font-size:1.06rem;border-radius:12px;background:var(--primary);color:#fff}
+
+/* Alerts container should appear above overlay */
+.alert-container{margin-top:18px;z-index:2;position:relative}
+.alert{padding:10px 12px;border-radius:8px;margin-bottom:8px;background:#fff;color:var(--text-dark)}
+
+/* Results table styling for consistent product look */
+.results-table{width:100%;border-collapse:collapse;font-family:Inter, Poppins, sans-serif}
+.results-table thead th{text-align:left;padding:12px 10px;color:var(--text-dark);font-weight:700;border-bottom:1px solid rgba(15,20,36,0.06)}
+.results-table tbody td{padding:12px 10px;border-bottom:1px solid rgba(15,20,36,0.04);color:rgba(7,16,36,0.85)}
+.results-table tbody tr:nth-child(even){background:rgba(15,20,36,0.015)}
+
+/* Score bar colors tied to variables */
+.score-bar{height:100%;background:var(--score-green)}
+.score-bar.score-green{background:var(--score-green)}
+.score-bar.score-yellow{background:var(--score-yellow)}
+.score-bar.score-red{background:var(--score-red)}
+
+/* Small utility: keep container-custom consistent spacing */
+.container-custom{padding-left:24px;padding-right:24px}
+
+/* ---- Candidate card list styles ---- */
+.candidates-list{display:flex;flex-direction:column;gap:14px;margin-top:12px}
+.candidate-card{display:flex;gap:18px;align-items:flex-start;padding:18px;border-radius:14px;transition:transform .12s ease,box-shadow .12s;background:var(--card-bg)}
+.candidate-card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(8,16,36,0.08)}
+.candidate-left{width:72px;display:flex;align-items:center;justify-content:center}
+.rank-badge{width:56px;height:56px;border-radius:12px;background:linear-gradient(180deg,var(--warm-1),var(--warm-2));display:flex;align-items:center;justify-content:center;color:#071024;font-weight:800;font-size:1.1rem;box-shadow:0 8px 20px rgba(15,20,36,0.06)}
+.candidate-main{flex:1}
+.candidate-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.candidate-name{font-weight:800;font-size:1.05rem;color:var(--text-dark)}
+.score-block{display:flex;align-items:center;gap:12px}
+
+/* Progress bar */
+.progress{background:linear-gradient(90deg,#eaf5ff,#eef7ff);border-radius:10px;height:14px;width:260px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.6)}
+.progress-fill{height:100%;width:0;transform-origin:left;animation:fillBar 1.2s ease forwards}
+@keyframes fillBar{from{width:0}to{width:var(--pct)}}
+.progress-fill.score-green{background:linear-gradient(90deg,var(--score-green), #16a34a)}
+.progress-fill.score-yellow{background:linear-gradient(90deg,var(--score-yellow), #f97316)}
+.progress-fill.score-red{background:linear-gradient(90deg,var(--score-red), #dc2626)}
+.score-label{min-width:56px;text-align:right;font-weight:700;color:var(--text-dark)}
+
+/* Skills pills */
+.skills-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.skill-pill{background:#eef6ff;color:var(--primary);padding:6px 10px;border-radius:999px;font-weight:700;font-size:0.9rem}
+
+/* Suggestions (details summary) */
+.suggestions summary{cursor:pointer;padding:10px 12px;border-radius:10px;background:rgba(15,20,36,0.02);list-style:none;font-weight:700}
+.suggestions[open] summary{background:rgba(15,20,36,0.03)}
+.suggestions-body{padding:12px 10px;color:rgba(7,16,36,0.85)}
+.suggestions ul{margin:8px 0 0 18px}
+
+/* Ensure responsive stacking */
+@media (max-width:768px){
+    .progress{width:160px}
+    .rank-badge{width:48px;height:48px}
+    .candidate-card{flex-direction:column;align-items:flex-start}
+    .candidate-left{width:100%}
+    .candidate-header{width:100%;flex-direction:row;align-items:center}
 }
 
-.nav-links a {
-    margin-left: 25px;
-    font-weight: 600;
-    color: var(--text-medium);
+
+/* Make any direct button within page-content more prominent (Start AI Analysis) */
+.page-content .btn-primary{padding:14px 20px;font-size:1.05rem;border-radius:14px}
+
+/* Ensure upload sections are visually separated but balanced */
+.dashboard-grid .upload-section{display:flex;flex-direction:column;gap:14px}
+
+/* --- Responsive --- */
+@media (max-width: 1024px){
+    .dashboard-grid{grid-template-columns:1fr}
+    /* allow vertical scroll on smaller screens */
+    body.dashboard-theme{overflow:auto;height:auto}
+    body.dashboard-theme header, body.dashboard-theme .glass-header{height:auto;flex:0 0 auto}
+    body.dashboard-theme footer{height:auto;flex:0 0 auto}
 }
 
-.nav-links a:hover {
-    color: var(--primary-blue);
+@media (max-width:768px){
+    .login-card{padding:22px;border-radius:12px}
+    .auth-wrapper::before{background-position:center top}
+    .auth-wrapper{padding:18px}
 }
 
-/* --- Buttons & Forms --- */
-.btn-primary {
-    background-color: var(--primary-blue);
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease;
-    display: inline-block;
-    text-align: center;
+@media (max-width:420px){
+    .welcome{font-size:1.4rem}
+    .brand-name{font-size:0.95rem}
 }
 
-.btn-primary:hover {
-    background-color: #1D4ED8;
-    transform: translateY(-1px);
+/* Keep legacy classes compatibility */
+.welcome, .lead, .brand, .brand-logo, .brand-name, .input-group, .form-control, .forgot, .btn-primary, .btn-login, .auth-footer, .page-content, .dashboard-grid { }
+
+/* ---------------- About page styles (modular, uses existing variables) ---------------- */
+.about-page{padding-top:36px;padding-bottom:120px;max-width:1100px}
+.about-hero{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;padding:24px 12px;margin-bottom:18px}
+.about-hero .hero-content{max-width:720px}
+.about-hero h1{font-size:2rem;margin:0 0 10px;color:var(--text-dark);line-height:1.06;font-weight:800}
+.about-hero .lead{font-size:1rem;color:var(--text-muted);margin-bottom:12px;max-width:720px}
+.hero-cta{display:flex;gap:12px}
+.hero-visuals{display:flex;gap:14px;align-items:center;color:rgba(7,16,36,0.06);transform:translateY(6px)}
+
+.about-section{margin:14px 0 22px}
+.about-section h2{font-size:1.35rem;margin-bottom:8px;color:var(--text-dark);font-weight:800}
+.about-section p{color:var(--text-muted);margin:0 0 10px;font-size:0.98rem}
+
+.about-cards{display:flex;flex-direction:column;gap:12px;max-width:920px}
+.about-cards.two-column .card{flex:1 1 calc(50% - 18px)}
+.about-cards .card{background:var(--card-bg);padding:14px;border-radius:12px;box-shadow:var(--soft-shadow);display:flex;gap:12px;align-items:flex-start;min-width:220px}
+.card-icon{color:var(--primary);font-size:1.05rem;padding-top:6px}
+.card h3{margin:0 0 6px;font-size:1rem;color:var(--text-dark);font-weight:800}
+.card p{margin:0;color:var(--text-muted);font-size:0.95rem}
+
+.feature-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+.feature-list li{display:flex;gap:10px;align-items:flex-start;color:var(--text-muted);font-size:0.98rem}
+.feature-list li i{color:var(--primary);min-width:20px;margin-top:4px}
+
+.mission{background:linear-gradient(90deg, rgba(255,255,255,0.95), rgba(255,255,255,0.98));padding:18px;border-radius:12px}
+
+.who-list{list-style:disc;margin-left:18px;color:var(--text-muted);font-size:0.98rem}
+
+.cta-section .cta-card{background:linear-gradient(180deg, rgba(37,99,235,0.05), rgba(37,99,235,0.02));padding:18px;border-radius:12px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.cta-section h2{margin:0;font-size:1.25rem}
+
+/* Buttons: keep consistent with existing btn styles but add alternatives */
+.btn{background:transparent;border:1px solid rgba(7,16,36,0.06);padding:10px 14px;border-radius:12px;color:var(--text-dark);cursor:pointer}
+.btn-primary{background:linear-gradient(90deg,var(--primary),var(--primary-strong));color:#fff;padding:10px 16px;border-radius:12px;text-decoration:none}
+
+/* Responsive adjustments for tablet and smaller */
+@media (max-width:1024px){
+    .about-hero{flex-direction:column;align-items:flex-start;padding:18px}
+    .about-hero .hero-visuals{order:2;opacity:0.05}
 }
 
-.form-control {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+@media (max-width:768px){
+    .logo{position:relative;left:0;top:0;padding-left:0}
+    .glass-header .container-custom{padding-left:24px}
+    .about-hero h1{font-size:1.6rem}
+    .about-hero{padding:14px}
+    .about-cards .card{flex:1 1 100%}
+    .about-page{padding-bottom:80px}
 }
 
-.form-control:focus {
-    border-color: var(--primary-blue);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
-}
-
-/* --- Login/Signup Specific --- */
-.auth-wrapper {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, var(--secondary-light) 0%, #E0F2FE 100%);
-    padding: 20px;
-}
-
-.auth-box {
-    width: 100%;
-    max-width: 450px;
-    padding: 40px;
-    text-align: center;
-}
-
-/* --- Dashboard Specific --- */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    margin-top: 30px;
-}
-
-.upload-zone {
-    text-align: center;
-    padding: 50px 20px;
-    border: 2px dashed var(--border-light);
-    border-radius: var(--border-radius-lg);
-    cursor: pointer;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
-    background-color: var(--secondary-light);
-}
-
-.upload-zone:hover {
-    border-color: var(--primary-blue);
-    background-color: #EFF6FF;
-}
-
-.file-list {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px;
-    text-align: left;
-}
-
-.file-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid #F1F5F9;
-}
-
-.file-list button {
-    background: none;
-    border: none;
-    color: #EF4444; /* Red for remove */
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.loading-bar {
-    height: 10px;
-    background-color: var(--border-light);
-    border-radius: 5px;
-    margin-top: 30px;
-    overflow: hidden;
-    display: none; /* Controlled by JS */
-}
-
-.progress-fill {
-    height: 100%;
-    width: 0%;
-    background-color: #10B981; /* Green for success */
-    transition: width 0.5s ease;
-}
-
-/* --- Results Table Specific --- */
-.results-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.results-table th, .results-table td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-light);
-}
-
-.results-table th {
-    background-color: #E0F2FE;
-    font-weight: 600;
-    color: var(--primary-blue);
-}
-
-.score-bar-container {
-    background-color: var(--secondary-light);
-    border-radius: 4px;
-    height: 8px;
-    overflow: hidden;
-}
-
-.score-bar {
-    height: 100%;
-    transition: width 0.5s ease, background-color 0.5s ease;
-}
-
-/* Color thresholds for score bars */
-.score-green {
-    background: linear-gradient(90deg, #16a34a 0%, #86efac 100%); /* green */
-}
-.score-yellow {
-    background: linear-gradient(90deg, #f59e0b 0%, #fde68a 100%); /* yellow/orange */
-}
-.score-red {
-    background: linear-gradient(90deg, #ef4444 0%, #fda4af 100%); /* red */
-}
-
-.highlight-gold, .highlight-silver, .highlight-bronze {
-    font-weight: 700;
-    position: relative;
-    padding-left: 25px;
-}
-
-.highlight-gold::before, .highlight-silver::before, .highlight-bronze::before {
-    content: '⭐';
-    position: absolute;
-    left: 0;
-}
-
-.highlight-silver::before { content: '🥈'; }
-.highlight-bronze::before { content: '🥉'; }
-
-/* --- Footer --- */
-footer {
-    padding: 20px 0;
-    margin-top: 50px;
-    border-top: 1px solid var(--border-light);
-    text-align: center;
-    font-size: 0.9rem;
-    color: var(--text-medium);
-    background-color: white;
-}
-
-/* --- Responsiveness --- */
-@media (max-width: 900px) {
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 600px) {
-    .navbar {
-        flex-direction: column;
-        text-align: center;
-    }
-    .nav-links {
-        margin-top: 15px;
-    }
-    .nav-links a {
-        margin: 0 10px;
-    }
-    .card-shadow {
-        padding: 20px;
-    }
-    .results-table th, .results-table td {
-        padding: 10px;
-        font-size: 0.85rem;
-    }
-}
+/* End About page styles */

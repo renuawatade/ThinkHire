@@ -1,55 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Resume Parsing & Job Matching | Hire Smarter</title>
-    
-    <!-- Link to your static CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<body>
-    <!-- Header -->
+    <title>ThinkHire | Think Smart. Hire Better.</title>
+
+    <!-- Main CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <!-- ================= HEADER ================= -->
     <header>
-        <div class="container-custom navbar">
-            <div class="logo"> AI Matcher</div>
-            <nav class="nav-links">
-                <a href="{{ url_for('home') }}">Home</a>
-                <a href="{{ url_for('about') }}">About</a>
-                <a href="{{ url_for('contact') }}">Contact</a>
-                <a href="{{ url_for('login') }}" class="btn-primary" style="margin-left: 25px;">Login / Signup</a>
-            </nav>
+      <div class="container-custom navbar nav-modern">
+        <div class="nav-left">
+          <a href="/" class="brand-link">
+            <span class="brand-icon">TH</span>
+            <span class="brand-text">ThinkHire</span>
+          </a>
         </div>
+
+        <nav class="nav-center">
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('about') }}">About</a>
+          <a href="#services">Services</a>
+          <a href="#solutions">Solutions</a>
+          <a href="#pages">Pages</a>
+        </nav>
+
+        <div class="nav-right">
+          <a href="{{ url_for('contact') }}" class="btn-primary">Contact Us</a>
+        </div>
+      </div>
     </header>
 
-    <!-- Hero Section -->
-    <main class="container-custom" style="padding-top: 80px; padding-bottom: 80px;">
-        <section style="text-align: center; max-width: 800px; margin: 0 auto;">
-            <h1 style="font-size: 3.5rem; margin-bottom: 20px; line-height: 1.2;">
-                Hire Smarter with 
-                <span style="color: var(--primary-blue);">AI-Powered</span> 
-                Resume Parsing and Job Matching.
-            </h1>
-            <p style="font-size: 1.25rem; color: var(--text-medium); margin-bottom: 40px;">
-                Upload resumes and job descriptions to get ranked candidate matches using 
-                <strong>NLP</strong> and <strong>semantic similarity</strong>. 
-                Streamline your recruitment process and find the perfect fit — faster.
+    <!-- ================= HERO ================= -->
+    <main class="hero-section hero-modern">
+      <div class="container-custom">
+        <div class="hero-grid">
+          <div class="hero-left">
+            <div class="tagline">Smart hiring, faster.</div>
+            <h1 class="hero-title">Find the best talent with ThinkHire</h1>
+            <p class="hero-subtitle">
+              AI-powered candidate screening and intelligent matching that helps
+              recruiters shortlist quality candidates faster — without the
+              manual heavy-lifting.
             </p>
-            <a href="{{ url_for('login') }}" class="btn-primary" style="padding: 15px 40px; font-size: 1.1rem;">
-                Get Started <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
-            </a>
-        </section>
+
+            <div class="hero-ctas">
+              <a href="{{ url_for('login') }}" class="btn-primary"
+                >Get Started</a
+              >
+              <a href="#about" class="btn-ghost">How it Works</a>
+            </div>
+          </div>
+
+          <div class="hero-right">
+            <div class="hero-shape" aria-hidden="true"></div>
+            <img
+              src="{{ url_for('static', filename='images/team-illustration.png') }}"
+              alt="Team"
+              class="hero-illustration"
+            />
+
+            <div class="floating-card">We Have Awesome Team</div>
+          </div>
+        </div>
+      </div>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container-custom">
-            &copy; 2025 AI Matcher | All Rights Reserved.
+    <!-- ================= FEATURES ================= -->
+    <section class="page-content features-section">
+      <div class="container-custom features-grid">
+        <div class="feature">
+          <h3>Smart Resume Parsing</h3>
+          <p>Extract skills, experience, and education automatically.</p>
         </div>
+
+        <div class="feature">
+          <h3>AI Job Matching</h3>
+          <p>Match candidates to roles using intelligent scoring.</p>
+        </div>
+
+        <div class="feature">
+          <h3>Instant Shortlisting</h3>
+          <p>Prioritize top candidates and speed up interviews.</p>
+        </div>
+
+        <div class="feature">
+          <h3>Secure & Compliant</h3>
+          <p>Enterprise-ready controls and data privacy by design.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+      <div class="container-custom">
+        &copy; 2025 <strong>ThinkHire</strong>. All rights reserved.
+      </div>
     </footer>
-</body>
+  </body>
 </html>
