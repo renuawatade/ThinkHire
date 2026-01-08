@@ -326,6 +326,11 @@ def upload_files():  # 👈 renamed to match dashboard.html
             resumes_info.append(info)
 
     # --- AI Matching ---
+    # ❗ Guard: no resumes uploaded
+    if not resumes_raw:
+        flash("Please upload at least one resume before starting AI analysis.", "warning")
+        return redirect(url_for("dashboard"))
+
     matches = match_job_to_candidates(jd_text, resumes_raw, top_k=len(resumes_raw))
     for idx, score in matches:
         if 0 <= idx < len(resumes_info):

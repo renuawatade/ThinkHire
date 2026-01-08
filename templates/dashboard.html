@@ -116,14 +116,27 @@
         </div>
       </form>
 
-      {% with messages = get_flashed_messages(with_categories=true) %} {% if
-      messages %}
-      <div class="alert-container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div class="flash-container">
         {% for category, message in messages %}
-        <div class="alert alert-{{ category }}">{{ message }}</div>
+          <div class="flash flash-{{ category }}">
+            <i class="fas fa-exclamation-circle"></i>
+              <span>{{ message }}</span>
+          </div>
         {% endfor %}
       </div>
-      {% endif %} {% endwith %}
+      {% endif %}
+      {% endwith %}
+      <script>
+        setTimeout(() => {
+          document.querySelectorAll('.flash').forEach(flash => {
+            flash.classList.add('hide');
+            setTimeout(() => flash.remove(), 600); // remove after animation
+          });
+        }, 2000); // 2 seconds
+      </script>
+
     </main>
 
     <footer>

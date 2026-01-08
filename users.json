@@ -8,5 +8,10 @@
     "full_name": "kiran",
     "email": "kiran@gmail.com",
     "password": "scrypt:32768:8:1$0LAUzugGuSD13MYU$472faed95669b162b5d61c4169f45059f2dca0efe45faae1be7cf4d8de6393cdc3548924a17bd375adfd7a580af72f919095fdde697ac3a6736df502e4d8a2d2"
+  },
+  "Noopur": {
+    "full_name": "Noopur",
+    "email": "noopur@gmail.com",
+    "password": "scrypt:32768:8:1$dG48vObGXr8IcGp6$ecd0c90ea00765a37b630d2d5c707bf921f37a05a69392408ca1f1545d940cfa5197e9a7019aa8376e00893e6dd6f5e57b8ab53a48840bcc61f0561e86235b33"
   }
 }
